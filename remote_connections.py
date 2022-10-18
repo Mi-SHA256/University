@@ -5,24 +5,24 @@ ip_address = input("Enter IP address: ")
 username = input("Enter Username: ")
 password = input("Enter Password: ")
 
-    
+#telnet connection with pexpect    
 def telnet():
     
-    session = pexpect.spawn('telnet' + ip_address, encoding = "utf-8", timeout = 20)
-    result = session.expect(['Username:', pexpect.TIMEOUT])
+    session = pexpect.spawn('telnet ' + ip_address, encoding = "utf-8", timeout = 20) #"summons" connection
+    result = session.expect(['Username: ', pexpect.TIMEOUT]) #expected output, if nothing similar shows up, an error will pop up
     
     if result != 0:
         print("Failed to create a session for: ", ip_address)
         exit()
         
-    session.sendline(username)
+    session.sendline(username) #sends the previously inputted username
     result = session.expect(['Password: ', pexpect.TIMEOUT])
     
     if result != 0:
         print('Failed to enter the username: ', username)
         exit()
         
-    session.sendline(password)
+    session.sendline(password) #sends the previously inputted password
     result - session.expect(['#', pexpect.TIMEOUT])
     
     if result != 0:
@@ -33,20 +33,26 @@ def telnet():
     print("                   Username: ", username)
     print("                   Password: ", password)
     
-    session.sendline('quit')
-    session.close()
     
-def ssh_connection(ip_address, username, password):
+    session.sendline("show running-config")
+    config = session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
+    
+    with open("running_config.txt", "w") as f:
+        f.write(config)
+
+
+#ssh connection with pexpect    
+def ssh_connection():
     password_enable = input("Enter enable password: ")
     
-    session = pexpect.spawn("ssh" + username + '@' + ip_address, encoding = 'utf-8', timeout = 20)
-    result = session.expect(['Password: ', pexpect.TIMEOUT, pexpect.EOF])
+    session = pexpect.spawn("ssh" + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
+    result = session.expect(['Password: ', pexpect.TIMEOUT, pexpect.EOF]) #expected output, if nothing similar shows up, an error will pop up
     
     if result != 0:
         print("Failed to create a session for: ", ip_address)
         exit()
     
-    session.sendline(password)
+    session.sendline(password) #sends the previously inputted password
     result = session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
     
     if result != 0:
@@ -82,8 +88,6 @@ def ssh_connection(ip_address, username, password):
     
 #exit config
     session.sendline("exit")
-#exit enable
-    session.sendline("exit")
 
 #connection established
 
@@ -91,8 +95,11 @@ def ssh_connection(ip_address, username, password):
     print("                   Username: ", username)
     print("                   Password: ", password)
     
-#close connection
-    session.close()
+    session.sendline("show running-config")
+    config = session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
+    
+    with open("/home/running_config.txt", "w") as f:
+        f.write(config)
 
 
 
