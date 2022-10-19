@@ -8,15 +8,10 @@ password = input("Enter Password: ")
 #telnet connection with pexpect    
 def telnet():
     
-    session = pexpect.spawn('telnet ' + ip_address, encoding = "utf-8", timeout = 20) #"summons" connectiond output      
-    session.sendline(username) #sends the previously inputted username])  
+    session = pexpect.spawn('telnet ' + ip_address, encoding = "utf-8", timeout = 20) #"summons" connection       
+    session.sendline(username) #sends the previously inputted username  
     session.sendline(password) #sends the previously inputted password
     session.sendline("show running-config")
-    
-    config = session.before
-    
-    with open("running_config.txt", "w") as f:
-        f.write(config)
 
 
 #ssh connection with pexpect    
@@ -25,14 +20,9 @@ def ssh_connection():
     
     session = pexpect.spawn("ssh" + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
     session.sendline(password) #sends the previously inputted password
-    session.sendline("enable")
+    session.sendline("enable") #sends command to enable console
     session.sendline(password_enable)
     session.sendline("show running-config")
-    
-    config = session.before()
-    
-    with open("running_config.txt", "w") as f:
-        f.write(config)
 
 
 def menu():
