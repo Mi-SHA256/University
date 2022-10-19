@@ -9,30 +9,61 @@ password = input("Enter Password: ")
 def telnet():
     
     session = pexpect.spawn('telnet ' + ip_address, encoding = "utf-8", timeout = 20) #"summons" connection       
+    session.expect(["Username:", pexpect.TIMEOUT])
+    
     session.sendline(username) #sends the previously inputted username  
+    session.expect(["Password:", pexpect.TIMEOUT])
+    
     session.sendline(password) #sends the previously inputted password
-    session.sendline("show running-config")
-
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    session.sendline("terminal length 0")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    session.sendline("show run")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    print("The running configuration has been saved to config.txt")
+    with open("config.txt", "w") as f:
+        f.write(session.before)
 
 #ssh connection with pexpect    
 def ssh_connection():
     password_enable = input("Enter enable password: ")
     
     session = pexpect.spawn("ssh" + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+
+    
     session.sendline(password) #sends the previously inputted password
+    session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
+
     session.sendline("enable") #sends command to enable console
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+    
     session.sendline(password_enable)
-    session.sendline("show running-config")
+    session.expect(['#', pexpect.TIMEOUT, pexpect.EOF])
+    
+    session.sendline("terminal length 0")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    session.sendline("show run")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    print("The running configuration has been saved to config.txt")
+    with open("config_ssh.txt", "w") as f:
+        f.write(session.before)
 
 
 def menu():
     
+    print("")
     print("~~~~~~~~~~~~~~~~~~~~~~ Welcome! ~~~~~~~~~~~~~~~~~~~~~~~")
-    print("Please choose a way to remotely connect to a device:")
+    print("Please choose a way to remotely connect to a device,")
+    print("      and extract the currently running config")
     print("")
     print("1. Telnet")
     print("2. SSH")
-    print("")
     print("3. Quit")
     
     choice = int(input("Enter your choice: "))
