@@ -23,9 +23,10 @@ def telnet():
     session.sendline("show run")
     session.expect(["#", pexpect.TIMEOUT])
     
-    print("The running configuration has been saved to config.txt")
     with open("config.txt", "w") as f:
         f.write(session.before)
+        f.close()
+    print("The running configuration has been saved to config.txt")
 
 #ssh connection with pexpect    
 def ssh_connection():
@@ -50,10 +51,11 @@ def ssh_connection():
     session.sendline("show run")
     session.expect(["#", pexpect.TIMEOUT])
     
-    print("The running configuration has been saved to config_ssh.txt")
+
     with open("config_ssh.txt", "w") as f:
         f.write(session.before)
-
+        f.close()
+    print("The running configuration has been saved to config_ssh.txt")
 
 def menu():
     
