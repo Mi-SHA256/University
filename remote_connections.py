@@ -31,7 +31,7 @@ def telnet():
 def ssh_connection():
     password_enable = input("Enter enable password: ")
     
-    session = pexpect.spawn("ssh" + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
+    session = pexpect.spawn("ssh " + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
     session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
 
     
@@ -50,7 +50,7 @@ def ssh_connection():
     session.sendline("show run")
     session.expect(["#", pexpect.TIMEOUT])
     
-    print("The running configuration has been saved to config.txt")
+    print("The running configuration has been saved to config_ssh.txt")
     with open("config_ssh.txt", "w") as f:
         f.write(session.before)
 
@@ -65,6 +65,7 @@ def menu():
     print("1. Telnet")
     print("2. SSH")
     print("3. Quit")
+    print("")
     
     choice = int(input("Enter your choice: "))
     
