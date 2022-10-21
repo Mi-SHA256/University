@@ -17,19 +17,37 @@ def telnet():
     session.sendline(password) #sends the previously inputted password
     session.expect(["#", pexpect.TIMEOUT])
     
-    session.sendline("terminal length 0")
+    session.sendline("show session")
     session.expect(["#", pexpect.TIMEOUT])
     
-    session.sendline("show run")
-    session.expect(["#", pexpect.TIMEOUT])
-    
-    with open("config.txt", "w") as f:
-        f.write(session.before)
-        f.close()
-    print("The running configuration has been saved to config.txt")
+    print(session.before)
+
+
+
 
 #ssh connection with pexpect    
 def ssh_connection():
+    password_enable = input("Enter enable password: ")
+    
+    session = pexpect.spawn("ssh " + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+
+    
+    session.sendline(password) #sends the previously inputted password
+    session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
+
+    session.sendline("enable") #sends command to enable console
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+    
+    session.sendline(password_enable)
+    session.expect(['#', pexpect.TIMEOUT, pexpect.EOF])
+    
+    session.sendline("show session")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    print(session.before)
+
+def ssh_config():
     password_enable = input("Enter enable password: ")
     
     session = pexpect.spawn("ssh " + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
@@ -66,16 +84,19 @@ def menu():
     print("")
     print("1. Telnet")
     print("2. SSH")
-    print("3. Quit")
+    print("3. Save config file via secure connection")
     print("")
+    print("4. Quit")
     
     choice = int(input("Enter your choice: "))
     
     if choice == 1:
         telnet()
     elif choice == 2:
-        ssh_connection()   
+        ssh_connection()
     elif choice == 3:
+        ssh_config()   
+    elif choice == 4:
         print("Goodbye!")  
     else:
         print("Choice is not valid. ")
