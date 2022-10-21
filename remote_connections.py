@@ -17,7 +17,7 @@ def telnet():
     session.sendline(password) #sends the previously inputted password
     session.expect(["#", pexpect.TIMEOUT])
     
-    session.sendline("show session")
+    session.sendline("show user")
     session.expect(["#", pexpect.TIMEOUT])
     
     print(session.before)
@@ -42,7 +42,7 @@ def ssh_connection():
     session.sendline(password_enable)
     session.expect(['#', pexpect.TIMEOUT, pexpect.EOF])
     
-    session.sendline("show session")
+    session.sendline("show user")
     session.expect(["#", pexpect.TIMEOUT])
     
     print(session.before)
