@@ -75,18 +75,44 @@ def ssh_config():
         f.close()
     print("The running configuration has been saved to config_ssh.txt")
 
+def ssh_config_compare():
+    
+    password_enable = input("Enter enable password: ")
+
+    session = pexpect.spawn("ssh " + username + '@' + ip_address, encoding = 'utf-8', timeout = 20) #"summons" connection
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+
+    session.sendline(password) #sends the previously inputted password
+    session.expect(['>', pexpect.TIMEOUT, pexpect.EOF])
+
+    session.sendline("enable") #sends command to enable console
+    session.expect(['Password:', pexpect.TIMEOUT, pexpect.EOF])
+    
+    session.sendline(password_enable)
+    session.expect(['#', pexpect.TIMEOUT, pexpect.EOF])
+    
+    session.sendline("terminal length 0") #makes the terminal's limit null, allowing the console to display everyting on one singular page
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    session.sendline("show archive config diff")
+    session.expect(["#", pexpect.TIMEOUT])
+    
+    print(session.before)
+
+
+
 def menu():
     
     print("")
     print("~~~~~~~~~~~~~~~~~~~~~~ Welcome! ~~~~~~~~~~~~~~~~~~~~~~~")
-    print("Please choose a way to remotely connect to a device,")
-    print("      and extract the currently running config")
+    print("               Please choose an option")
     print("")
     print("1. Telnet")
     print("2. SSH")
     print("3. Save config file via secure connection")
+    print("4. Compare running and startup config")
     print("")
-    print("4. Quit")
+    print("5. Quit")
     
     choice = int(input("Enter your choice: "))
     
@@ -97,6 +123,8 @@ def menu():
     elif choice == 3:
         ssh_config()   
     elif choice == 4:
+        ssh_config_compare()
+    elif choice == 5:
         print("Goodbye!")  
     else:
         print("Choice is not valid. ")
