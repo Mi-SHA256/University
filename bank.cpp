@@ -20,26 +20,24 @@ using namespace std;
     /* FUNCTION DEFINITION */
 
     bool Validitycheck(char ip[16], string email, int num);
-    void DepositMoney(int depositedamount, int intialbalance);
-    void withdrawMoney(int withdrawalamount, int intialbalance);
+    int DepositMoney(int depositedamount, int intialbalance);
+    int withdrawMoney(int withdrawalamount, int intialbalance);
     void displayBalance(int intialbalance);
-    void Transfer (int transfer, int intialbalance);
+    int Transfer (int transfer, int intialbalance);
     void ChangeDetails();
     bool validateIP(char str []);
     bool EmailCheck(string email);
     bool NumberCheck(int num);
     // define any other function here.
 
-
-
+    int id;
+    char ipaddress[16];
+    string email;
 
 // Main Program
 int main()
 {
-    int withdrawalamount, depositedamount, transfer, id, intialbalance;
-    intialbalance=10000;
-    char ipaddress[16];
-    string email;
+    int withdrawalamount, depositedamount, transfer, intialbalance = 10000, m = 1;
 
     cout << "\t **************** WELCOME MR C++ EXPERT TO MY BANKING APPLICATION ******************* \n";
     cout<< endl;
@@ -68,7 +66,7 @@ int main()
     /* CHECKING VALIDITY OF CREDENTIALS */
     bool checkresult= Validitycheck(ipaddress,email,id); // This line call a function validitycheck with arguments ipaddress, email and id. The return
                                                          // value is true or false
-
+    while(m){
    // If ValidtyCheck is true move to next lines of code otherwise terminate processing
     if (checkresult) // if checkresult is true
     {
@@ -91,12 +89,11 @@ int main()
             {
                 if (input=="W" || input=="w"){
                         cout<<"Calling Withdraw Option -";
-                        withdrawMoney(withdrawalamount, intialbalance);
+                        intialbalance = withdrawMoney(withdrawalamount, intialbalance);
                         t=false;
                 }
                 else if (input=="D" || input=="d"){
-                    cout << "Deposit";
-                    DepositMoney(depositedamount, intialbalance);
+                    intialbalance = DepositMoney(depositedamount, intialbalance);
                     t=false;
                 }
                 else if (input=="B" || input=="b"){
@@ -107,16 +104,16 @@ int main()
                 else if (input=="T" || input=="t")
                  {
                     cout << "Transfer Balance";
-                    Transfer(transfer,intialbalance);
+                    intialbalance = Transfer(transfer,intialbalance);
                      t=false;
                  }
                 else if (input=="C" || input=="c"){
-                     cout << "Change Deails";
                      ChangeDetails();
                      t=false;
                 }
                 else if (input=="Q" || input=="q"){
                      cout << "QUIT";
+                     m=false;
                      t=false;
                 }
                  else
@@ -140,7 +137,7 @@ int main()
     }
 
 }
-
+}
 /* Function Definition */
 
     // Function for Validity Check
@@ -171,7 +168,7 @@ int main()
 
 
      // Function for Deposit
-    void DepositMoney(int depositedamount,int intialbalance)
+    int DepositMoney(int depositedamount,int intialbalance)
     {
 
     // Get how much user want to deposit and display balance after adding
@@ -180,7 +177,7 @@ int main()
     cin >> depositedamount;
     intialbalance = intialbalance + depositedamount;
     cout << "Your Balance is " << intialbalance <<endl;
-
+    return intialbalance;
     }
 
 
@@ -191,7 +188,7 @@ int main()
 
     // Function for Withdraw
 
-    void withdrawMoney(int withdrawalamount,int intialbalance)
+    int withdrawMoney(int withdrawalamount,int intialbalance)
     {
 
 
@@ -211,7 +208,7 @@ int main()
         intialbalance = intialbalance -  withdrawalamount;
         cout << "Your current balance is " << intialbalance <<endl;
     }
-
+    return intialbalance;
     }
 
 
@@ -229,7 +226,7 @@ int main()
 
 
     //function for Transfer Money
-    void Transfer(int transfer,int intialbalance)
+    int Transfer(int transfer,int intialbalance)
     {
         // Get how much user want to transfer and display balance after transfer
     cout << "Your current balance is " << intialbalance <<endl;
@@ -247,6 +244,7 @@ int main()
     cout << "Your current balance is " << intialbalance <<endl;
 
     }
+    return intialbalance;
     }
      // Function for change Details
 
@@ -257,6 +255,21 @@ int main()
 
     void ChangeDetails()
     {
+
+
+    cout << "\t ******** Enter Your IP Address :" ;
+    cin.ignore();
+    cin.get();
+    cin.getline(ipaddress, 16);
+    cout << endl;
+
+    cout << "\t ******** Enter Your Email Address:" ;
+    cin >> email;
+    cout << endl;
+
+    cout << "\t ******** Enter Your ID :";
+    cin >>id;
+    cout << endl;
 
     }
 
