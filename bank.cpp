@@ -166,18 +166,6 @@ int main()
 
    }
 
-//
-//
-//
-//
-// I don't know what your criteria are, and I want you to learn how to do this yourself, but here's a start.
-// I'm not sure what you mean by "IPCheck" and "EmailCheck" and "NumberCheck" but I'm assuming they are functions that return a bool.
-// I'm also assuming that you want to check that the IP address is valid, the email address is valid, and the number is valid.
-//
-//
-//
-//
-
 
 
 
@@ -192,7 +180,7 @@ int main()
     cin >> depositedamount;
     intialbalance = intialbalance + depositedamount;
     cout << "Your Balance is " << intialbalance <<endl;
-    return;
+
     }
 
 
@@ -223,7 +211,7 @@ int main()
         intialbalance = intialbalance -  withdrawalamount;
         cout << "Your current balance is " << intialbalance <<endl;
     }
-    return;
+
     }
 
 
@@ -236,7 +224,6 @@ int main()
     {
     // display balance after adding
     cout << "Your current balance is " << intialbalance <<endl;
-    return;
     }
 
 
@@ -252,13 +239,13 @@ int main()
 
 
         cout << "Insufficient balance" <<endl;
-        return;
+
     }
     else
     {
     intialbalance = intialbalance - transfer;
     cout << "Your current balance is " << intialbalance <<endl;
-    return;
+
     }
     }
      // Function for change Details
